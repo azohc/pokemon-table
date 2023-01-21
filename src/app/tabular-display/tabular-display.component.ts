@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { BehaviorSubject, map, Subscription } from 'rxjs';
+import { BehaviorSubject, map, of, Subscription } from 'rxjs';
 import { PokemonService } from '../pokemon.service';
 import { PaginationState } from '../shared/pagination-state.interface';
 import { PokemonData, PokemonDetail } from '../shared/pokemon-data.interface';
@@ -10,7 +10,7 @@ import { PokemonData, PokemonDetail } from '../shared/pokemon-data.interface';
   styleUrls: ['./tabular-display.component.sass'],
 })
 export class TabularDisplayComponent implements OnInit, OnDestroy {
-  subscriptions = new Subscription();
+  subscription = new Subscription();
   pokemonResponse$ = new BehaviorSubject<PokemonData | null>(null);
   pokemonResults$ = this.pokemonResponse$.pipe(map((data) => data?.results));
 
@@ -39,7 +39,7 @@ export class TabularDisplayComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   getPokemonData(offset: number, limit: number) {
@@ -48,7 +48,14 @@ export class TabularDisplayComponent implements OnInit, OnDestroy {
       this.paginationState.totalPages = Math.ceil(
         data.count / this.paginationState.pageSize
       );
-      this.pokemonResponse$.next(data);
+      data.results.map((pokemon, i) => {
+        this.pokemonService
+          .getPokemonDetail(pokemon.url)
+          .subscribe((detail) => {
+            data.results[i].detail = detail;
+            this.pokemonResponse$.next(data);
+          });
+      });
       this.isLoading = false;
     });
   }

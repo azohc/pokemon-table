@@ -8,7 +8,12 @@ import { PaginationState } from '../shared/pagination-state.interface';
 })
 export class PaginationComponent implements OnInit {
   @Input()
-  paginationState!: PaginationState;
+  paginationState?: PaginationState = {
+    currentPage: 1,
+    totalPages: 0,
+    pageSize: 10,
+    pageSizes: [5, 10, 20, 50, 100],
+  };
 
   @Output()
   firstPageClicked = new EventEmitter();

@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TabularDisplayComponent } from './tabular-display.component';
@@ -8,6 +9,7 @@ describe('TabularDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientModule],
       declarations: [TabularDisplayComponent],
     }).compileComponents();
   });

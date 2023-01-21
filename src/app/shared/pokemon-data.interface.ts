@@ -5,10 +5,12 @@ export interface PokemonData {
   results: Array<{
     name: string;
     url: string;
+    detail: PokemonDetail;
   }>;
 }
 
 export interface PokemonDetail {
+  id: number;
   weight: number;
   types: Array<PokemonType>;
   sprites: {

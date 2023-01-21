@@ -13,14 +13,25 @@
     <thead>
       <tr>
         <th>Name</th>
+        <th>Type</th>
         <th>Weight</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let pokemon of pokemonResults$ | async">
         <td class="pokemon-name">{{ pokemon.name }}</td>
-        <td>placeholder weight</td>
-        <!-- <td>{{ pokemon.detail.weight }}</td> -->
+        <td>
+          <span *ngFor="let type of pokemon.detail?.types">{{
+            type.type.name
+          }}</span>
+        </td>
+        <td>{{ pokemon.detail?.weight }}</td>
+        <td>
+          <img
+            [src]="pokemon.detail?.sprites?.front_default"
+            alt="Pokemon sprite"
+          />
+        </td>
       </tr>
     </tbody>
   </table>
