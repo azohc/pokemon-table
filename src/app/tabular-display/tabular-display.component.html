@@ -13,15 +13,14 @@
     <thead>
       <tr>
         <th>Name</th>
-        <th>GET More Data</th>
+        <th>Weight</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let pokemon of pokemon.results">
+      <tr *ngFor="let pokemon of pokemonResults$ | async">
         <td class="pokemon-name">{{ pokemon.name }}</td>
-        <td>
-          <a [href]="pokemon.url">GET 📶</a>
-        </td>
+        <td>placeholder weight</td>
+        <!-- <td>{{ pokemon.detail.weight }}</td> -->
       </tr>
     </tbody>
   </table>

@@ -10,7 +10,13 @@ import { CircleComponent } from './circle/circle.component';
 import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
-  declarations: [AppComponent, TabularDisplayComponent, SpinnerComponent, CircleComponent, PaginationComponent],
+  declarations: [
+    AppComponent,
+    TabularDisplayComponent,
+    SpinnerComponent,
+    CircleComponent,
+    PaginationComponent,
+  ],
   imports: [BrowserModule, HttpClientModule, FormsModule],
   providers: [],
   bootstrap: [AppComponent],

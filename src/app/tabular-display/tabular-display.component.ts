@@ -1,14 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, map, Subscription } from 'rxjs';
 import { PokemonService } from '../pokemon.service';
 import { PaginationState } from '../shared/pagination-state.interface';
+import { PokemonData, PokemonDetail } from '../shared/pokemon-data.interface';
 
 @Component({
   selector: 'app-tabular-display',
   templateUrl: './tabular-display.component.html',
   styleUrls: ['./tabular-display.component.sass'],
 })
-export class TabularDisplayComponent implements OnInit {
-  pokemon: any;
+export class TabularDisplayComponent implements OnInit, OnDestroy {
+  subscriptions = new Subscription();
+  pokemonResponse$ = new BehaviorSubject<PokemonData | null>(null);
+  pokemonResults$ = this.pokemonResponse$.pipe(map((data) => data?.results));
+
   isLoading = false;
 
   paginationState: PaginationState = {
@@ -33,14 +38,17 @@ export class TabularDisplayComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   getPokemonData(offset: number, limit: number) {
     this.isLoading = true;
     this.pokemonService.getPokemonData(offset, limit).subscribe((data) => {
-      this.pokemon = data;
-      this.pokemonService.nextUrl = this.pokemon.next;
       this.paginationState.totalPages = Math.ceil(
-        this.pokemon.count / this.paginationState.pageSize
+        data.count / this.paginationState.pageSize
       );
+      this.pokemonResponse$.next(data);
       this.isLoading = false;
     });
   }
@@ -75,8 +83,6 @@ export class TabularDisplayComponent implements OnInit {
       this.currentPageAsOffset,
       this.paginationState.pageSize
     );
-    // this.getPokemonData((this.totalPages - 1) * this.pageSize, this.pageSize);
-    // this.currentPage = this.totalPages;
   }
 
   changePageSize(size: number) {
