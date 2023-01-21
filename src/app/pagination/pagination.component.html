@@ -1,0 +1,48 @@
+<div class="pagination-container">
+  <div class="current-next-prev-pages">
+    <app-circle
+      *ngIf="paginationState.currentPage !== 1"
+      (clicked)="firstPageClicked.emit()"
+    >
+      1
+    </app-circle>
+    <app-circle
+      *ngIf="![1, 2].includes(paginationState.currentPage)"
+      (clicked)="previousPageClicked.emit()"
+    >
+      {{ paginationState.currentPage - 1 }}
+    </app-circle>
+
+    <app-circle [clickable]="false">
+      {{ paginationState.currentPage }}
+    </app-circle>
+
+    <app-circle
+      (clicked)="nextPageClicked.emit()"
+      *ngIf="
+        ![paginationState.totalPages, paginationState.totalPages - 1].includes(
+          paginationState.currentPage
+        )
+      "
+    >
+      {{ paginationState.currentPage + 1 }}
+    </app-circle>
+    <app-circle
+      (clicked)="lastPageClicked.emit()"
+      *ngIf="paginationState.currentPage !== paginationState.totalPages"
+    >
+      {{ paginationState.totalPages }}
+    </app-circle>
+  </div>
+  <div>
+    <label>Page size:</label>
+    <select
+      [(ngModel)]="paginationState.pageSize"
+      (change)="pageSizeChanged.emit(paginationState.pageSize)"
+    >
+      <option *ngFor="let size of paginationState.pageSizes" [value]="size">
+        {{ size }}
+      </option>
+    </select>
+  </div>
+</div>
