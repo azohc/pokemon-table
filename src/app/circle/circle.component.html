@@ -1,0 +1,7 @@
+<button
+  (click)="handleClick()"
+  [ngClass]="{ border: clickable, cursor: clickable }"
+  [disabled]="!clickable"
+>
+  <ng-content></ng-content>
+</button>

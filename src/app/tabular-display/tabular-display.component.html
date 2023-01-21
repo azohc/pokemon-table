@@ -1,0 +1,53 @@
+<div *ngIf="isLoading">
+  <app-spinner></app-spinner>
+</div>
+<div *ngIf="!isLoading">
+  <div>
+    page
+    {{ currentPage }}
+    /
+    {{ totalPages }}
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pokemon of pokemon.results">
+        <td>{{ pokemon.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="!isLoading" class="pages-container">
+    <app-circle *ngIf="currentPage !== 1" (clicked)="firstPage()">
+      1
+    </app-circle>
+
+    <div class="current-next-prev-pages">
+      <app-circle
+        *ngIf="![1, 2].includes(currentPage)"
+        (clicked)="previousPage()"
+      >
+        {{ currentPage - 1 }}
+      </app-circle>
+      <app-circle [clickable]="false">
+        {{ currentPage }}
+      </app-circle>
+      <app-circle
+        (clicked)="nextPage()"
+        *ngIf="![totalPages, totalPages - 1].includes(currentPage)"
+      >
+        {{ currentPage + 1 }}
+      </app-circle>
+    </div>
+    <app-circle (clicked)="lastPage()" *ngIf="currentPage !== totalPages">
+      {{ totalPages }}
+    </app-circle>
+    <label>Page size:</label>
+    <select [(ngModel)]="pageSize" (change)="changePageSize(pageSize)">
+      <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+    </select>
+  </div>
+</div>
